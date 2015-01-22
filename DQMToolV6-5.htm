@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js">
+</script>
+
+<meta charset="UTF-8"/>
+
+<meta name="keywords" content="Data Quality Management"/>
+
+<meta name="description" content="Data Quality Management Process"/>
+
+<meta name="author" content="Sean Creedon"/>
+
+<style>
+
+body{
+	font-family: Helvetica, sans-serif;
+	background-color: #F6F6F6;
+}
+
+h1, h2, h3 {
+position:relative;
+top: -0.5em;
+width: 100%;
+color: #FFFFFF;
+text-shadow: 2px 2px #595959;
+padding:0.1% 4% 0.1% 2%;
+left: -1%;
+background: -webkit-linear-gradient(#99CCFF, #6699FF); /* For Safari 5.1 to 6.0 */
+background: -o-linear-gradient(#99CCFF, #6699FF); /* For Opera 11.1 to 12.0 */
+background: -moz-linear-gradient(#99CCFF, #6699FF); /* For Firefox 3.6 to 15 */
+background: linear-gradient(#99CCFF, #6699FF); /* Standard syntax */
+}
+
+#left {position:relative;
+width: 45%;
+float: left;}
+
+#right {position:relative;
+width: 45%;
+float: right;}
+
+#left li {
+display: inline;
+list-style-type: none;
+margin: 0;
+padding: 0;}
+
+#ActiveComments li {
+list-style-type: none;
+}
+
+td {
+	border-bottom-style: dotted;
+	border-color: #6699FF;
+	border-width: 1px;
+}
+
+input[type=checkbox]:hover {
+    -webkit-box-shadow: inset 0 0 2px 2px #6699FF;
+}
+
+.hoverHighlight:hover{
+	background-color: #FFFFFF;
+}
+</style>
+
+<title>
+Data Quality Management Process Tracking Tool
+</title>
+
+</head>
+<body>
+<h1>Data Quality Management Process Tracking Tool</h1>
+<!-- -->
+
+<div id="left">
+<form>
+<div id="CSA">
+	<h2>CSA</h2>
+	<!--terminated or claim pending-->
+<p>Is the policy terminated, matured or have a claim?</p>	
+	
+  <span class="hoverHighlight"><input type="checkbox" name="Terminated" value="Terminated" class="Terminated" id="Terminated" onclick="inputUpdate()">Is the policy terminated?<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="Matured" value="Matured" class="Matured" id="Matured" onclick="inputUpdate()">Has the policy matured?<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="Claim" value="Claim" class="Claim" id="ClaimFiled" onclick="inputUpdate()">Is there a settled or pending claim?<br></span>
+	<div id="Status">
+		<h3>Status</h3>
+		<div id="ActiveStatus">
+<!--Active status information. May not require button; display should depend on terminated status above.-->
+<p>Select active status: </p>	
+  <span class="hoverHighlight"><select id="ActiveStatusSelect">
+  <option value="ActivePremPaying">Active</option>
+  <option value="ActivePremPaidUp">Paid-Up, Extended Term, or Reduced Paid-up</option>
+  <option value="LapsePending">Lapse Pending</option>
+  <option value="ClaimPending">Claim Pending</option>
+</select></span>	
+		</div>
+		
+		<div id="TerminatedStatus">
+<!--Terminated status information. May not require button; display should depend on terminated status above.-->
+<p>Select terminated status: </p>	
+  <span class="hoverHighlight"><select id="TerminatedStatusSelect" onmouseup="inputUpdate()">
+  <option value="Blank" selected> </option>
+  <option value="ClaimPaid">Claim Paid</option>
+  <option value="Expired">Expired</option>
+  <option value="Lapsed">Lapsed</option>
+  <option value="Matured">Matured</option>
+  <option value="SurrenderedByClient">Surrendered by Client</option>
+  <option value="TerminatedByLNL">Terminated by LNL</option>
+</select></span>
+		</div>
+		
+		<div id="IfTerminated">
+			<!--  -->
+			
+		</div>
+		
+	</div>
+		
+	</div>
+	
+	
+	
+	<div id="Client">
+		<h3>Client</h3>
+		<!--owner info in CSA -->
+<p>What data elements are in CSA?</p>	
+  <span class="hoverHighlight"><input type="checkbox" name="Name" value="Name" class="Name" id="CSAName" checked onclick="inputUpdate()">Name<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="SSN" value="SSN" class="SSN"  id="CSASSN" onclick="inputUpdate()">SSN<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="DOB" value="DOB" class="DOB"  id="CSADOB" onclick="inputUpdate()">DOB<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="Address" value="Address" class="Address"  id="CSAAOR" onclick="inputUpdate()">Address<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="OwnIsIns" value="OwnIsIns" class="OwnIsIns"  id="OwnIsIns" onclick="inputUpdate()">Owner is the Insured<br></span>
+	</div>
+	
+<div id="AWD">
+	<h2>AWD</h2>
+	<!--AWD contents -->
+<p>Does AWD contain?</p>	
+  <span class="hoverHighlight"><input type="checkbox" name="PREAWD" value="PREAWD" id="PREAWDfile" onclick="inputUpdate()">PREAWD<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="MATENDOW" value="MATENDOW" id="MATENDOW" class="Matured" onclick="inputUpdate()">MATENDOW<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="ClaimCase" value="ClaimCase" class="Claim" id="ClaimCase" onclick="inputUpdate()">Claim Item<br></span>
+</div>
+
+<div id="PREAWD">
+	<h2>PREAWD</h2>
+	<!--data found in PREAWD -->
+<p>What data elements are found in books and record review?</p> <!--Previously: "What new or changed data elements are found in record review?" -->
+  <span class="hoverHighlight"><input type="checkbox" name="Name" value="Name" class="Name" id="PREAWDName" checked onclick="inputUpdate()">Name<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="SSN" value="SSN" class="SSN" id="PREAWDSSN" onclick="inputUpdate()">SSN<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="DOB" value="DOB" class="DOB" id="PREAWDDOB" onclick="inputUpdate()">DOB<br></span>
+  <span class="hoverHighlight"><input type="checkbox" name="Address" value="Address" class="Address" id="PREAWDAOR" onclick="inputUpdate()">Address<br></span>
+</div>
+
+<div id="Accurint">
+	<h2>Accurint</h2>
+	<!--data found in Accurint -->
+<p>What data elements are found in Accurint search?</p>
+<table>
+  <tr>
+    <th>Data Element</th>
+    <th>Located?</th>		
+    <th>Matched to other Data?</th>
+  </tr>
+  <tr>
+    <td>Name</td>
+    <td><span class="hoverHighlight"><input type="checkbox" name="Name" value="Name" class="Name" id="AccurintName" onclick="inputUpdate()"></span></td>		
+    <td><span class="hoverHighlight"><input type="checkbox" name="Name" value="Name" class="Name" id="MatchingInfoName" onclick="inputUpdate()"></span></td>
+  </tr>
+  <tr>
+    <td>SSN</td>
+    <td><span class="hoverHighlight"><input type="checkbox" name="SSN" value="SSN" class="SSN" id="AccurintSSN" onclick="inputUpdate()"></span></td>		
+    <td><span class="hoverHighlight"><input type="checkbox" name="SSN" value="SSN" class="SSN" id="MatchingInfoSSN" onclick="inputUpdate()"></span></td>
+  </tr>
+  <tr>
+    <td>DOB</td>
+    <td><span class="hoverHighlight"><input type="checkbox" name="DOB" value="DOB" class="DOB" id="AccurintDOB" onclick="inputUpdate()"></span></td>		
+    <td><span class="hoverHighlight"><input type="checkbox" name="DOB" value="DOB" class="DOB" id="MatchingInfoDOB" onclick="inputUpdate()"></span></td>
+  </tr><tr>
+    <td>Address of Record</td>
+    <td> </td>
+    <td><span class="hoverHighlight"><input type="checkbox" name="Address" value="Address" class="Address" id="MatchingInfoAOR" onclick="inputUpdate()"></span></td>
+  </tr>
+  <tr>
+    <td>New and Current Address</td>
+    <td colspan="2"><span class="hoverHighlight"><input type="checkbox" name="Address" value="Address" class="Address" id="AccurintNewADR" onclick="inputUpdate()"></span></td>
+  </tr>
+  <tr>
+    <td>Date of Death</td>
+    <td colspan="2"><span class="hoverHighlight"><input type="checkbox" name="DOD" value="DOD" class="DOD" id="AccurintDOD" onclick="inputUpdate()"></span></td>
+  </tr>
+  <tr>
+    <td>Relative Match</td>
+    <td colspan="2"><span class="hoverHighlight"><input type="checkbox" name="MatchingInfoRelativeMatch" value="MatchingInfoRelativeMatch" class="MatchingInfoRelativeMatch" id="MatchingInfoRelativeMatch" onclick="inputUpdate()"></span></td>
+  </tr>
+    <tr  class="DisplayNoRecordsFound" id="DisplayNoRecordsFound">
+    <td class="DisplayNoRecordsFound">No Records Found</td>
+    <td colspan="2"><span class="hoverHighlight"><input type="checkbox" name="NoRecordsFound" value="NoRecordsFound" class="DisplayNoRecordsFound" id="NoRecordsFound" onclick="inputUpdate()"></span></td>
+  </tr>
+  </table>
+<button type="reset" value="Reset" onclick="window.location.reload()">Reset</button>
+<button type="button" onmousedown="inputUpdate()" onclick="OutputUpdate()" onmouseup="formSubmit()">Next</button>	
+	</form>
+
+
+</div>
+
+</div>
+
+<div id="right">
+	<h2>Actions</h2>
+	
+	<p id="ActionAlert"> </p>
+		
+		
+ <div id="SystemUpdate">
+		<h3>System Update:</h3>
+		<p id="SystemUpdateInfo"> </p>
+		 </div>
+		 
+<div id="CreateWork">
+		<h3>Create AWD Work Items:</h3>
+		<p id="CreateWorkInfo"> </p>
+		</div>
+	
+<div id="Correspondence">
+		<h3>Client Correspondence:</h3>
+		<p id="CorrespondenceInfo"> </p>
+	</div>
+	
+	
+ <div id="Closure">
+		<h3>Closure:</h3>
+		<p id="ClosureInfo"> </p>
+	<h4>CSD:</h4>
+	<table id="CSDField">
+    <tbody id="CSDFieldInput">
+        
+    </tbody>
+    </table>
+ 	<ul id="CSDUpdate">    
+<li id="WorkType">Work Type: </li>
+<li id="CSDStatus">Status:  </li>
+<li id="TagLineComment">Tag Line Comment: </li>
+<li id="InsuredAccurintStatus">Insured Accurint Status: </li>
+<li id="ActivePolicyStatus">Active Policy Status: </li>
+<li id="UpdateBasis">Update Basis: </li>
+<li id="CSDDisposition">Disposition: </li>
+<li id="CSDInsuredInfoName">CSD Insured Info Name: </li>
+<li id="CSDInsuredInfoDOB">CSD Insured Info DOB: </li>
+<li id="CSDInsuredInfoSSN">CSD Insured Info SSN: </li>
+<li id="CSDInsuredInfoAOR">CSD Insured Info AOR: </li>
+  </ul>
+
+	
+
+   <h4>Comments:</h4>
+   <p id="Comments"> </p>
+   
+   <p>ACTIVE Work Item Comments:</p>
+   <ul style="list-style-type: none" id="ActiveComments"> 
+<li id="Disposition">DISPOSITION: </li>
+<li id="ActiveAccurint">ACCURINT: </li>
+<li id="AdminUpdates">ADMIN UPDATES: </li>
+<li id="CompletedBy">COMPLETED BY: </li>
+<li id="CorrespondComment">CORRESPONDENCE: </li>
+   	</ul>
+	
+</div>
+</div>
+
+
+</body>
+
+<script>
+
+var date = new Date();
+var CurrentDate= (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear();
+var OwnIsIns = false, SendLetter = false;
+var NoRecordsFound, PREAWDInfoCount;
+
+var progressTracker = ["CSA", "Status", "Client", "AWD", "PREAWD"]; //track progress by div id; unsure if needed
+
+//personal info to compare B&R to system
+function personalInfoObj(Name, SSN, DOB, AOR) {
+	this.Name = Name;
+	this.SSN = SSN;
+	this.DOB = DOB;
+	this.AOR = AOR;
+}
+
+var CSAPersonal = new personalInfoObj(); //system personal info
+
+
+var PREAWDPersonal = new personalInfoObj(); //B&R personal info
+
+var AccurintPersonal = new personalInfoObj(); //personal info found in search
+AccurintPersonal.NewADR = false;
+AccurintPersonal.DOD = false;
+delete AccurintPersonal.AOR;
+
+var MatchingInfoPersonal = new personalInfoObj(); //personal info matched in search;
+MatchingInfoPersonal.RelativeMatch = false;
+var MatchingInfoCounter;
+
+var AWDObj = {PREAWDfile: false, MATENDOW: false, ClaimCase: false}; //work items needed depending on system status
+var StatusObj = {Terminated: false, Matured: false, ClaimFiled: false }; //status from system
+
+//May not use:
+var TerminatedStatusSelect = {
+ClaimPaid: false,
+Expired: false,
+Lapsed: false,
+Matured: false,
+SurrenderedByClient: false,
+TerminatedByLNL: false
+};  //for "terminated status" drop down; set w/ loop in update funtion
+//May not use:
+var ActiveStatusSelect = {
+ActivePremPaying: false,
+ActivePremPaidUp: false,
+LapsePending: false,
+ClaimPending: false
+}; //for "active status" drop down; set w/ loop in update funtion & remove "terminated status" if selected
+
+// Active Work item comments variable & arrays
+var Disposition = ["FINAL", "FOREIGN INSURED", "PENDING CLIENT RESPONSE"];
+var ActiveAccurint = ["NA", "NOT NECESSARY POLICY SURRENDERED", "NOT NECESSARY CLAIM PAID", "SEE ATTACHED ACCURINT 3-POINT MATCH TRAIL", "SEE ATTACHED ACCURINT FOR COVERED CHILD", "SEE ATTACHED ACCURINT RELATIVE TAB", "INCONCLUSIVE RESULTS"];
+var AdminUpdates = ["NA", "REFER TO "];
+var CompletedBy = ["DQM", "TAX TEAM", "CONTRACT CHANGE TEAM", "NON-FINANCIAL TEAM", "CLAIMS TEAM", "NA" ];
+var CorrespondComment = ["INQUIRY LETTER MAILED TO POLICYOWNER AT AOR", "INQUIRY LETTER FOR NAME MAILED TO POLICYOWNER AT AOR", "INQUIRY LETTER FOR DOB MAILED TO POLICYOWNER AT AOR", "PHISHING LETTER MAILED TO (ADR ON ACCURINT)", "NA"];
+var DispositionInfo = " ", ActiveAccurintInfo = " ", AdminUpdatesInfo = "NA", CompletedByInfo = " ", CorrespondCommentInfo = " ";
+// End active Work item comments variable & arrays
+
+var StatusSelect, CSAStatus, StatusID; //both drop downs should get passed to CSAStatus
+
+var Update1910 = false, Update1601 = false, Update1712 = false, UpdateName = false, UpdateAOR = false;
+
+var WorkType = ["Leave as DQMACTIVE(C or H) ", "Change to DQMTERM(C or H)"];
+var CSDStatus = ["COMPLETE", "LETTER1", "REVIEW", "OUTOFSCOPE"];
+var TagLineComment = ["Active Prem Paying", "Active Prem Paid-Up", "Lapse Pending", "Claim Pending", "Claim Paid", "Expired", "Lapsed", "Matured", "Surrendered by Client", "Terminated by LNL"];
+var ActivePolicyStatus = ["ACTIVE", "MATURED"];
+var UpdateBasis = ["ACCURINT", "ADMIN SYSTEM CORRECT", "INTERNAL SEARCH EXHAUSTED", "LINCOLN B&R"];
+var CSDDisposition = ["CLAIMINITIATED", "NO ACTION", "NOT RESOLVED", "RESOLVED"];
+
+var CSDInsuredInfoBox = ["Y", "N"];
+
+var WorkTypeInfo = WorkType[0];
+var CSDStatusInfo = " ";
+var TagLineCommentInfo = " ";
+var ActivePolicyStatusInfo = " ";
+var UpdateBasisInfo = " ";
+var CSDDispositionInfo = " ";
+
+var CSDInsuredName = " ";
+var CSDInsuredDOB = " ";
+var CSDInsuredSSN = " ";
+var CSDInsuredAOR = " ";
+
+function StatusDropDown(ID){
+StatusSelect = document.getElementById(ID);
+CSAStatus = StatusSelect.options[StatusSelect.selectedIndex].value;
+console.log("CSA status is:" + " " + CSAStatus);
+}
+
+var Alert = " ";
+function AlertTextReset()
+{
+CSDInsuredName = " ";
+CSDInsuredDOB = " ";
+CSDInsuredSSN = " ";
+CSDInsuredAOR = " ";
+
+document.getElementById("ActionAlert").innerHTML = " ";
+document.getElementById("ActiveStatus").style.color = "black";
+document.getElementById("SystemUpdateInfo").innerHTML = " ";
+document.getElementById("CreateWorkInfo").innerHTML = " ";
+document.getElementById("Comments").innerHTML = " ";
+document.getElementById("CorrespondenceInfo").innerHTML = " ";
+    
+document.getElementById("Disposition").innerHTML = "DISPOSITION: ";
+document.getElementById("ActiveAccurint").innerHTML = "ACCURINT: ";
+document.getElementById("AdminUpdates").innerHTML = "ADMIN UPDATES: ";
+document.getElementById("CompletedBy").innerHTML = "COMPLETED BY: ";
+document.getElementById("CorrespondComment").innerHTML = "CORRESPONDENCE: ";
+
+document.getElementById("WorkType").innerHTML = "Work Type: ";
+document.getElementById("CSDStatus").innerHTML = "Status:  ";
+document.getElementById("TagLineComment").innerHTML = "Tag Line Comment: ";
+document.getElementById("ActivePolicyStatus").innerHTML = "Active Policy Status: ";
+document.getElementById("UpdateBasis").innerHTML = "Update Basis: ";
+document.getElementById("CSDDisposition").innerHTML = "Disposition: ";
+
+document.getElementById("CSDInsuredInfoName").innerHTML = "CSD Insured Info Name: ";
+document.getElementById("CSDInsuredInfoDOB").innerHTML = "CSD Insured Info DOB: ";
+document.getElementById("CSDInsuredInfoSSN").innerHTML = "CSD Insured Info SSN: ";
+document.getElementById("CSDInsuredInfoAOR").innerHTML = "CSDInsured Info AOR: ";
+}
+
+function inputUpdate(){
+
+var x, i = 0, DisplayNoRecordsFound = 1, Prefix, listObjProp;
+
+DispositionInfo = " ", ActiveAccurintInfo = " ", AdminUpdatesInfo = "NA", CompletedByInfo = " ", CorrespondCommentInfo = " ";
+SendLetter = false, Update1910 = false, Update1601 = false, Update1712 = false, UpdateName = false, UpdateAOR = false;
+AlertTextReset();
+WorkTypeInfo = WorkType[0];
+CSDStatusInfo = " ";
+TagLineCommentInfo = " ";
+ActivePolicyStatusInfo = " ";
+UpdateBasisInfo = " ";
+CSDDispositionInfo = " ";
+CSDInsuredName = " ";
+CSDInsuredDOB = " ";
+CSDInsuredSSN = " ";
+CSDInsuredAOR = " ";
+Alert = " ";
+
+Prefix = "CSA";
+listObjProp = Object.keys(CSAPersonal);
+for (x in CSAPersonal) {
+if (CSAPersonal[x] = document.getElementById(Prefix + x).checked)
+{
+CSAPersonal[x] = true;
+} else{
+CSAPersonal[x] = false;
+}
+console.log(Prefix + " " + listObjProp[i] + ": " + CSAPersonal[x]);
+i++;
+}
+
+PREAWDInfoCount = 0;
+Prefix = "PREAWD";
+listObjProp = Object.keys(PREAWDPersonal);
+i = 0;
+for (x in PREAWDPersonal) {
+if (PREAWDPersonal[x] = document.getElementById(Prefix + x).checked)
+{
+PREAWDPersonal[x] = true;
+PREAWDInfoCount++;
+} else{
+PREAWDPersonal[x] = false;
+}
+console.log(Prefix + " " + listObjProp[i] + ": " + PREAWDPersonal[x]);
+console.log("PREAWDInfoCount= " + PREAWDInfoCount);
+i++;
+}	
+	
+Prefix = "Status";
+listObjProp = Object.keys(StatusObj);
+i = 0;
+var StatusObjCount = 0;
+for (x in StatusObj) {
+StatusObj[x] = (document.getElementById(x).checked) ? true : false;
+if (StatusObj[x] = document.getElementById(x).checked) {StatusObjCount++}
+(StatusObjCount > 0) ? document.getElementById("ActiveStatus").style.display = "none" : document.getElementById("ActiveStatus").style.display = "initial";
+console.log(Prefix + " " + listObjProp[i] + ": " + StatusObj[x]);
+i++;
+(StatusObjCount > 0) ? StatusID = "TerminatedStatusSelect" : StatusID = "ActiveStatusSelect";
+}
+
+Prefix = "AWD";
+listObjProp = Object.keys(AWDObj);
+i = 0;
+for (x in AWDObj) {
+AWDObj[x] = (document.getElementById(x).checked) ? true : false;
+console.log(Prefix + " " + listObjProp[i] + ": " + AWDObj[x]);
+i++;
+}
+
+Prefix = "Accurint";
+listObjProp = Object.keys(AccurintPersonal);
+i = 0;
+for (x in AccurintPersonal) {
+if (AccurintPersonal[x] = document.getElementById(Prefix + x).checked)
+{
+AccurintPersonal[x] = true;
+DisplayNoRecordsFound--;
+} else{
+AccurintPersonal[x] = false;
+}
+console.log(Prefix + " " + listObjProp[i] + ": " + AccurintPersonal[x]);
+i++;
+}
+
+Prefix = "MatchingInfo";
+listObjProp = Object.keys(MatchingInfoPersonal);
+i = 0, MatchingInfoCounter = 0;
+for (x in MatchingInfoPersonal) {
+if (MatchingInfoPersonal[x] = document.getElementById(Prefix + x).checked)
+{
+MatchingInfoPersonal[x] = true;
+DisplayNoRecordsFound--;
+MatchingInfoCounter++;
+} else{
+MatchingInfoPersonal[x] = false;
+}
+console.log(Prefix + " " + listObjProp[i] + ": " + MatchingInfoPersonal[x]);
+i++;
+}
+
+function AlertTextFormat(AlertText)
+{
+document.getElementById("ActionAlert").innerHTML += AlertText + "<br>";
+document.getElementById("ActionAlert").style.color = "red";
+}
+
+if ( (StatusObjCount===0) && !(AWDObj.PREAWDfile) ){
+Alert ="Ensure PREAWD is in AWD. Request file and suspend ACTIVE work item for 30 days if missing.";
+AlertTextFormat(Alert);
+}
+
+if ( !(CSAPersonal.DOB || PREAWDPersonal.DOB) ) { 
+Alert ="<br>Do not search Accurint if no DOB is available from system or B&R.";
+AlertTextFormat(Alert);
+}
+
+if ( (StatusObj.ClaimFiled) || (AWDObj.ClaimCase) ){
+Alert ="Would a Claim prevent working this item? If so, click next to update Active work item and proceed to next assignment";
+AlertTextFormat(Alert);
+}
+
+if ( !(CSAPersonal.Name) || !(PREAWDPersonal.Name) ){
+Alert ="No name? How did that happen?";
+AlertTextFormat(Alert);
+alert(Alert);
+}
+//Add terminated stuff here:
+if ( (StatusID === "TerminatedStatusSelect") || (document.getElementById("Terminated").checked) ){
+Alert ="If policy is terminated and CSA status is NOT Terminated or Claim Paid, change Work Type to DQMTERM(C or H) and supend for 30 days.";
+AlertTextFormat(Alert);
+WorkTypeInfo = WorkType[1];
+}
+
+//add matured stuff here:
+if ( ((document.getElementById("MATENDOW").checked)) || (document.getElementById("Matured").checked) ) {
+Alert = "Policy is matured. Will need MATENDOW in AWD (search in COLD if not).";
+AlertTextFormat(Alert);
+WorkTypeInfo = WorkType[1];
+ActivePolicyStatusInfo = ActivePolicyStatus[1];
+AdminUpdatesInfo = AdminUpdates[0];
+TagLinCommentInfo = "Matured";
+AdminUpdatesInfo = "NA";
+CompletedByInfo = CompletedBy[0];
+CorrespondCommentInfo = CorrespondComment[4];
+CSDStatusInfo = CSDStatus[0];
+CSDDispositionInfo = CSDDisposition[2];
+}
+
+if ( (MatchingInfoCounter > 2) && (AccurintPersonal.DOD) ){
+Alert ="Send to Review for possible claim if 3 point match and DOD found in Accurint search results.";
+AlertTextFormat(Alert);
+WorkTypeInfo = WorkType[0];
+}
+
+StatusDropDown(StatusID);
+
+(document.getElementById("OwnIsIns").checked) ? OwnIsIns = true : OwnIsIns = false;
+console.log("Owner is insured?" + " " + OwnIsIns);
+
+NoRecordsFound = (document.getElementById("NoRecordsFound").checked) ? true : false;
+console.log("No Records Found: " + " " + NoRecordsFound);
+(DisplayNoRecordsFound > 0) ? document.getElementById("DisplayNoRecordsFound").style.display = "table-row" : document.getElementById("DisplayNoRecordsFound").style.display = "none";
+
+console.log("Matching Info Counter =" + MatchingInfoCounter);
+} //end of inputUpdate function
+
+var UpdateCount = 0, UpdateComment = " "; //intended for function to add "," and "and" to Active comments; just adds ",and"
+
+function OutputUpdate() {
+AlertTextReset();
+Alert = " ";
+
+CSDInsuredName = "N";
+CSDInsuredDOB = "N";
+CSDInsuredSSN = "N";
+CSDInsuredAOR = "N";
+
+document.getElementById("ActionAlert").innerHTML = "Create screenshot PDFs of CSA status (named STATUS) and PREAWD page(s) (named APPL) with relevant insured information.<br>Attach screenshots to ACTIVE work item.<br>";
+document.getElementById("ActionAlert").style.color = "black";
+//Add check for Mature policies:
+if ( /*(AWDObj.MATENDOW = true)*/ ((document.getElementById("MATENDOW").checked)) || (document.getElementById("Matured").checked) ) {
+	document.getElementById("ActionAlert").innerHTML += "<br>Create screenshot PDF of MATENDOW status (from COLD), name STATUS1, and attach to ACTIVE work item.<br>";
+}
+
+//Add Accurint addition w/ naming convention check:
+if (MatchingInfoCounter <= 2) {
+document.getElementById("ActionAlert").innerHTML += "<br>Attach Accurint search results, name ACC NOINS; leave SSN locked.<br>";
+}
+if (MatchingInfoCounter > 2) {
+document.getElementById("ActionAlert").innerHTML += "<br>Attach Accurint search results, name ACC INS; leave SSN unlocked";
+}
+
+var Reset = ["SystemUpdateInfo", "CorrespondenceInfo", "ClosureInfo", "CSDFieldInput", "Comments", "CreateWorkInfo"];
+for (var ResetCount = 0; ResetCount < Reset.length; ResetCount++)
+{document.getElementById(Reset[ResetCount]).innerHTML = " ";}
+ 
+ //Check for Maturity to cancel letters
+ if  ( (!(document.getElementById("MATENDOW").checked)) && !(document.getElementById("Matured").checked) ) {
+
+ if ((MatchingInfoCounter >= 2)  && (AccurintPersonal.NewADR) && !(CSAPersonal.AOR) && !(AccurintPersonal.DOD)){
+document.getElementById("CorrespondenceInfo").innerHTML = "Send Phishing Letter and W9 to new address located; do not include full policy number.";
+SendLetter = true;
+} else if((MatchingInfoCounter >= 2) && (CSAPersonal.AOR) && !(AccurintPersonal.DOD)){
+document.getElementById("CorrespondenceInfo").innerHTML = "Send Inquiry Letter and W9 to address in system.";
+SendLetter = true;
+} //Letters from Matching Info; doesn't consider Review Queue 	
+ } // End maturity check for letters
+ 
+if (SendLetter){CSDInsuredAOR = "Leave Blank";} //Leaves Insured Info for AOR blank on CSD screen if letter sent.
+
+var SystemUpdateInfo = " ", CreateWorkInfo = " " , Comments = " ";
+UpdateCount = 0;
+if  ( (!(document.getElementById("MATENDOW").checked)) && !(document.getElementById("Matured").checked) ) 
+ {//"if" above checks for mature policies to exclude system updates
+
+	if( (PREAWDPersonal.DOB) && !(CSAPersonal.DOB) ){ //DOB/1910 update
+		Update1910=true;
+		SystemUpdateInfo += "For DOB update:<br> Update 1910 Screen in LifeComm to DOB found in B&R. <br> Take screenshot of screen of 1910 screen.<br><br>";
+        CreateWorkInfo += "For DOB update:<br> Create DQMDOB work item (Status of new item is CREATED). <br> Attach screenshot of 1910 screen (named 1910).<br>Suspend this and active work item 4 days; note that it requires 2nd day check.<br><br>";
+        Comments += "For DOB update:<br> DOB UPDATED ON THE 1910 TO <span style='color:red'>MM/DD/YYY</span><br><br>";
+        UpdateCount++;
+        }
+	
+	//Update SSN/1601/1712
+if( (MatchingInfoCounter > 2) && (AccurintPersonal.SSN || MatchingInfoPersonal.SSN) && !(PREAWDPersonal.SSN) ) {
+		Update1601=true;
+		SystemUpdateInfo += "For SSN update:<br> Update 1601 Screen in LifeComm to SSN found in B&R. <br> Take screenshot of 1601 screen.<br><br>";
+        CreateWorkInfo += "For SSN update:<br> Create DQMSSN work item (Status of new item is CREATED). <br> Attach screenshot of 1601 screen (named 1601).<br>Suspend this and active work item 4 days; note that it requires 2nd day check.<br><br>";
+        Comments += "For SSN update:<br> SSN UPDATED UNCERTIFIED<br><br>";
+        UpdateCount++;
+        if(OwnIsIns){
+	Update1712=true;
+	SystemUpdateInfo += "For SSN update:<br> Also update 1712 Screen in LifeComm to SSN found in B&R. <br> Take screenshot of 1712 screen.<br><br>";
+    CreateWorkInfo += "For SSN update:<br> Attach 1712 screenshot (named 1712).<br><br>";
+
+}
+
+	}
+	
+if( (PREAWDPersonal.SSN) ) {
+		Update1601=true;
+		SystemUpdateInfo += "For SSN update:<br> Update 1601 Screen in LifeComm to SSN found in B&R. <br> Take screenshot of 1601 screen.<br><br>";
+        CreateWorkInfo += "For SSN update:<br> Create DQMSSN work item. <br>  Attach screenshot of 1601 screen.<br>Suspend this and active work item 4 days<br><br>";
+        Comments += "For SSN update:<br> SSN UPDATED CERTIFIED<br><br>";
+        UpdateCount++;        
+        if(OwnIsIns){
+	Update1712=true;
+	SystemUpdateInfo += "For SSN update:<br> Also update 1712 Screen in LifeComm to SSN found in B&R. <br> Take screenshot of 1712 screen.<br><br>";
+    CreateWorkInfo += "For SSN update:<br>Attach 1712 screenshot (named 1712).<br><br>";
+
+}
+
+	} 
+ 	 } //end Maturity check for system updates.	
+
+	
+CSDInfoUpdate();	
+
+document.getElementById("Disposition").innerHTML = "DISPOSITION: " + " " + DispositionInfo;
+document.getElementById("ActiveAccurint").innerHTML = "ACCURINT: " + " " + ActiveAccurintInfo;
+document.getElementById("AdminUpdates").innerHTML = "ADMIN UPDATES: " + " " + AdminUpdatesInfo;
+document.getElementById("CompletedBy").innerHTML = "COMPLETED BY: " + " " + CompletedByInfo;
+document.getElementById("CorrespondComment").innerHTML = "CORRESPONDENCE: " + " " + CorrespondCommentInfo;
+ 
+document.getElementById("WorkType").innerHTML = "Work Type: " + " " + WorkTypeInfo;
+document.getElementById("CSDStatus").innerHTML = "Status:  " + " " + CSDStatusInfo;
+document.getElementById("TagLineComment").innerHTML = "Tag Line Comment: " + " " + TagLineCommentInfo;
+document.getElementById("ActivePolicyStatus").innerHTML = "Active Policy Status: " + " " + ActivePolicyStatusInfo;
+document.getElementById("UpdateBasis").innerHTML = "Update Basis: " + " " + UpdateBasisInfo;
+document.getElementById("CSDDisposition").innerHTML = "Disposition: " + " " + CSDDispositionInfo;
+ 
+document.getElementById("CSDInsuredInfoName").innerHTML = "CSD Insured Info Name: " + " " + CSDInsuredName;
+document.getElementById("CSDInsuredInfoDOB").innerHTML = "CSD Insured Info DOB: " + " " + CSDInsuredDOB;
+document.getElementById("CSDInsuredInfoSSN").innerHTML = "CSD Insured Info SSN: " + " " + CSDInsuredSSN;
+document.getElementById("CSDInsuredInfoAOR").innerHTML = "CSDInsured Info AOR: " + " " + CSDInsuredAOR;
+ 
+document.getElementById("SystemUpdateInfo").innerHTML = SystemUpdateInfo;
+document.getElementById("CreateWorkInfo").innerHTML = CreateWorkInfo;
+document.getElementById("Comments").innerHTML = Comments;
+} //end of OutputUpdate function
+
+function CSDInfoUpdate(){
+
+//Update when work created
+if ((Update1910) || (Update1601) || (UpdateName) || (UpdateAOR)){
+  AdminUpdatesInfo = AdminUpdates[1];
+ }
+ 
+if ((Update1910) || (Update1601) || (UpdateName)){
+  CompletedByInfo = CompletedBy[1];
+} else if (UpdateAOR){CompletedByInfo = CompletedBy[4];} 
+else if (!(Update1910) && !(Update1601) && !(UpdateName) && !(UpdateAOR)){
+  CompletedByInfo = CompletedBy[5];
+ }
+
+console.log(UpdateCount="UpdateCount");  
+if (Update1910){
+    CSDInsuredDOB = "Enter DOB; in box, enter: ";
+    CSDInsuredDOB += CSDInsuredInfoBox[0];
+    AdminUpdatesInfo += "DQMDOB";}
+ if (Update1601){
+    CSDInsuredSSN = "Enter SSN; in box, enter: ";
+    if(!SendLetter){ //leaves checkbox blank if letter sent
+    CSDInsuredSSN += CSDInsuredInfoBox[0];}
+    if (Update1910) {AdminUpdatesInfo += " " + "AND" + " ";}
+    AdminUpdatesInfo += "DQMSSN";}
+if ((UpdateName) && !(AccurintPersonal.NewADR)){
+    CSDInsuredName += "Enter Name; in box, enter: ";
+    CSDInsuredName += CSDInsuredInfoBox[0];
+    AdminUpdatesInfo += "DQMNAME";}
+if ((UpdateAOR) && !(AccurintPersonal.NewADR)){ //***************
+    CSDInsuredAOR += "Enter State; in box, enter: ";
+    CSDInsuredAOR += CSDInsuredInfoBox[0];
+    AdminUpdatesInfo += "DQMADD";}
+if ((Update1910) || (Update1601) || (UpdateName) || (UpdateAOR)) {
+ AdminUpdatesInfo +=  " " + "DATED" + " " + CurrentDate ;
+ CompletedByInfo = CompletedBy[0];
+} else {AdminUpdatesInfo = "NA";}
+
+
+if((MatchingInfoCounter < 2) && !(Update1601) && !(Update1910)){ //matching info w/o letter 
+CorrespondCommentInfo = CorrespondComment[5];
+}
+
+if((MatchingInfoCounter < 2) && (SendLetter)) {
+	     CorrespondCommentInfo = CorrespondComment[3];
+} else if (!(SendLetter)){CorrespondCommentInfo = CorrespondComment[4];}
+
+if (SendLetter) {DispositionInfo = Disposition[2];} else {DispositionInfo = Disposition[0];}
+if( (UpdateCount) && (PREAWDInfoCount>1) ){UpdateBasisInfo = UpdateBasis[3];} else {UpdateBasisInfo = UpdateBasis[2];}
+
+if (NoRecordsFound) {ActiveAccurintInfo = ActiveAccurint[0];} else 
+if( (SendLetter) && (MatchingInfoCounter>2) ){ActiveAccurintInfo = ActiveAccurintInfo = "SEE ATTACHED ACCURINT 3-POINT MATCH TRAIL <span style='color:red'>-OR-</span> SEE ATTACHED ACCURINT FOR COVERED CHILD <span style='color:red'>-OR-</span> SEE ATTACHED ACCURINT RELATIVE TAB";}
+else {ActiveAccurintInfo = "INCONCLUSIVE RESULTS";}
+
+if ( !(SendLetter) && !(AccurintPersonal.DOD) && !( (StatusObj.ClaimFiled) || (AWDObj.ClaimCase) ) ) {CSDStatusInfo = CSDStatus[0];}
+else if(SendLetter){CSDStatusInfo = CSDStatus[1];} //assumes sending to Review and Out of Scope already covered
+
+if (SendLetter){CSDDispositionInfo="Leave Blank";} else {CSDDispositionInfo=CSDDisposition[2];}
+
+if (!(SendLetter)) {CorrespondCommentInfo = "NA";} else
+if ( (SendLetter) && (CSAPersonal.AOR)) {CorrespondCommentInfo = "INQUIRY LETTER MAILED TO POLICYOWNER AT AOR <span style='color:red'>-OR-</span> INQUIRY LETTER FOR NAME MAILED TO POLICYOWNER AT AOR <span style='color:red'>-OR-</span> INQUIRY LETTER FOR DOB MAILED TO POLICYOWNER AT AOR";}
+else if ( (SendLetter) && !(CSAPersonal.AOR)) {CorrespondCommentInfo = "PHISHING LETTER MAILED TO <span style='color:red'>(ADR ON ACCURINT)</span>";}
+
+switch (CSAStatus) {
+case "ClaimPending":
+TagLineCommentInfo = TagLineComment [3];
+break;
+case "ActivePremPaying":
+TagLineCommentInfo = TagLineComment [0];
+break;
+case "ActivePremPaidUp":
+TagLineCommentInfo = TagLineComment [1];
+break;
+case "LapsePending":
+TagLineCommentInfo = TagLineComment [2];
+break;
+case "ClaimPaid":
+TagLineCommentInfo = TagLineComment [4];
+break;
+case "Expired":
+TagLineCommentInfo = TagLineComment [5];
+break;
+case "Lapsed":
+TagLineCommentInfo = TagLineComment [6];
+break;
+case "Matured":
+TagLineCommentInfo = TagLineComment [7];
+break;
+case "SurrenderedByClient":
+TagLineCommentInfo = TagLineComment [8];
+break;
+case "TerminatedByLNL":
+TagLineCommentInfo = TagLineComment [9];
+break;
+default:
+TagLineCommentInfo = TagLineComment [1];
+}
+
+document.getElementById("ActionAlert").innerHTML += "<br>Complete GOR.";
+
+if ( (MatchingInfoCounter>2) && !(AccurintPersonal.DOD)  ) {document.getElementById("InsuredAccurintStatus").innerHTML = "Insured Accurint Status: ALIVE";}
+else {document.getElementById("InsuredAccurintStatus").innerHTML = "Insured Accurint Status: ";}
+
+if ( ((document.getElementById("MATENDOW").checked)) || (document.getElementById("Matured").checked) || (CSAStatus === "Matured") ) {
+	 // Comment/CSD info for maturity; same as InputUpdate alert:
+WorkTypeInfo = WorkType[1];
+ActivePolicyStatusInfo = ActivePolicyStatus[1];
+UpdateBasisInfo = UpdateBasis[2];
+AdminUpdatesInfo = AdminUpdates[0];
+//ActiveAccurintInfo = ActiveAccurint[0]; //Turn off? Unsure if "Accurnt:" when matured is always "NA"
+TagLineCommentInfo = "Matured";
+DispositionInfo = Disposition[0];
+AdminUpdatesInfo = "NA";
+CompletedByInfo = CompletedBy[5];
+CorrespondCommentInfo = CorrespondComment[4];
+CSDStatusInfo = CSDStatus[0];
+CSDDispositionInfo = CSDDisposition[2];
+}
+
+if ( (MatchingInfoCounter > 2) && (AccurintPersonal.DOD) ){
+document.getElementById("ActionAlert").innerHTML = "Send to Review for possible claim if 3 point match and DOD found in Accurint search results.";
+CSDInsuredName = " ";
+CSDInsuredDOB = " ";
+CSDInsuredSSN = " ";
+CSDInsuredAOR = " ";
+
+document.getElementById("ActiveStatus").style.color = "black";
+document.getElementById("SystemUpdateInfo").style.display = "none";
+document.getElementById("CreateWorkInfo").style.display = "none";
+document.getElementById("Comments").style.display = "none";
+document.getElementById("Disposition").style.display = "none";
+document.getElementById("ActiveAccurint").style.display = "none";
+document.getElementById("AdminUpdates").style.display = "none";
+document.getElementById("CompletedBy").style.display = "none";
+document.getElementById("CorrespondComment").style.display = "none";
+document.getElementById("CorrespondenceInfo").style.display = "none";
+document.getElementById("InsuredAccurintStatus").style.display = "none";
+document.getElementById("WorkType").style.display = "none";
+document.getElementById("CSDStatus").style.display = "none";
+document.getElementById("TagLineComment").style.display = "none";
+document.getElementById("ActivePolicyStatus").style.display = "none";
+document.getElementById("UpdateBasis").style.display = "none";
+document.getElementById("CSDDisposition").style.display = "none";
+document.getElementById("CSDInsuredInfoName").style.display = "none";
+document.getElementById("CSDInsuredInfoDOB").style.display = "none";
+document.getElementById("CSDInsuredInfoSSN").style.display = "none";
+document.getElementById("CSDInsuredInfoAOR").style.display = "none";
+} else 
+	if ( (CSAStatus === "ClaimPaid") || (StatusObj.ClaimFiled === true) || (CSAStatus === "ClaimPending") || (AWDObj.ClaimCase === true)){ // removed "(CSAStatus === "ClaimPaid") || " --see terminated status switch statement.
+document.getElementById("ActionAlert").innerHTML = " ";
+document.getElementById("CSDFieldInput").innerHTML = "<tr><td>Status:</td><td>OUTOFSCOPE</td></tr><tr><td>Tag Line Comment:</td><td>CLAIM</td></tr><tr><td>Disposition:</td><td>NO ACTION</td></tr>";
+MatchingInfoCounter=0;
+document.getElementById("ActiveComments").style.display = "none";
+document.getElementById("CSDUpdate").style.display = "none";
+document.getElementById("ActiveStatus").style.color = "black";
+document.getElementById("SystemUpdateInfo").style.display = "none";
+document.getElementById("CreateWorkInfo").style.display = "none";
+document.getElementById("Comments").style.display = "none";
+document.getElementById("Disposition").style.display = "none";
+document.getElementById("ActiveAccurint").style.display = "none";
+document.getElementById("AdminUpdates").style.display = "none";
+document.getElementById("CompletedBy").style.display = "none";
+document.getElementById("CorrespondComment").style.display = "none";
+document.getElementById("CorrespondenceInfo").style.display = "none";
+document.getElementById("InsuredAccurintStatus").style.display = "none";
+document.getElementById("WorkType").style.display = "none";
+document.getElementById("CSDStatus").style.display = "none";
+document.getElementById("TagLineComment").style.display = "none";
+document.getElementById("ActivePolicyStatus").style.display = "none";
+document.getElementById("UpdateBasis").style.display = "none";
+document.getElementById("CSDDisposition").style.display = "none";
+document.getElementById("CSDInsuredInfoName").style.display = "none";
+document.getElementById("CSDInsuredInfoDOB").style.display = "none";
+document.getElementById("CSDInsuredInfoSSN").style.display = "none";
+document.getElementById("CSDInsuredInfoAOR").style.display = "none";
+ } else //Out of Scope
+ if ( (CSAStatus === "TerminatedByLNL") || (document.getElementById("Terminated").checked) ){
+document.getElementById("ActionAlert").innerHTML = "If policy is terminated and CSA status is NOT Terminated or Claim Paid, change Work Type to DQMTERM(C or H) and supend for 30 days.";
+CSDInsuredName = " ";
+CSDInsuredDOB = " ";
+CSDInsuredSSN = " ";
+CSDInsuredAOR = " ";
+
+document.getElementById("ActiveStatus").style.color = "black";
+document.getElementById("SystemUpdateInfo").style.display = "none";
+document.getElementById("CreateWorkInfo").style.display = "none";
+document.getElementById("Comments").style.display = "none";
+document.getElementById("Disposition").style.display = "none";
+document.getElementById("ActiveAccurint").style.display = "none";
+document.getElementById("AdminUpdates").style.display = "none";
+document.getElementById("CompletedBy").style.display = "none";
+document.getElementById("CorrespondComment").style.display = "none";
+document.getElementById("CorrespondenceInfo").style.display = "none";
+document.getElementById("InsuredAccurintStatus").style.display = "none";
+document.getElementById("WorkType").style.display = "none";
+document.getElementById("CSDStatus").style.display = "none";
+document.getElementById("TagLineComment").style.display = "none";
+document.getElementById("ActivePolicyStatus").style.display = "none";
+document.getElementById("UpdateBasis").style.display = "none";
+document.getElementById("CSDDisposition").style.display = "none";
+document.getElementById("CSDInsuredInfoName").style.display = "none";
+document.getElementById("CSDInsuredInfoDOB").style.display = "none";
+document.getElementById("CSDInsuredInfoSSN").style.display = "none";
+document.getElementById("CSDInsuredInfoAOR").style.display = "none";
+} else {
+	document.getElementById("SystemUpdateInfo").style.display = "block";
+document.getElementById("CreateWorkInfo").style.display = "block";
+document.getElementById("Comments").style.display = "block";
+document.getElementById("Disposition").style.display = "block";
+document.getElementById("ActiveAccurint").style.display = "block";
+document.getElementById("AdminUpdates").style.display = "block";
+document.getElementById("CompletedBy").style.display = "block";
+document.getElementById("CorrespondComment").style.display = "block";
+document.getElementById("CorrespondenceInfo").style.display = "block";
+document.getElementById("InsuredAccurintStatus").style.display = "block";
+document.getElementById("WorkType").style.display = "block";
+document.getElementById("CSDStatus").style.display = "block";
+document.getElementById("TagLineComment").style.display = "block";
+document.getElementById("ActivePolicyStatus").style.display = "block";
+document.getElementById("UpdateBasis").style.display = "block";
+document.getElementById("CSDDisposition").style.display = "block";
+
+document.getElementById("CSDInsuredInfoName").style.display = "block";
+document.getElementById("CSDInsuredInfoDOB").style.display = "block";
+document.getElementById("CSDInsuredInfoSSN").style.display = "block";
+document.getElementById("CSDInsuredInfoAOR").style.display = "block";
+}
+
+} //end CSD update
+
+function formSubmit() {
+/*var child = document.getElementById("left");
+child.parentNode.removeChild(child);*/
+document.getElementById("left").style.display = "none";    
+    
+ var span = document.createElement("span");
+ var element = document.getElementById("right");
+ element.appendChild(span);
+ span.innerHTML = "<button type='reset' value='Reset' onclick='window.location.reload()'>Reset</button>"; 
+}
+	
+</script>
+
+</html>
